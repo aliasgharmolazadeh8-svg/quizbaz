@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quiz Baz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+ <a class="logo" onclick="nav('home')"><i data-ic="bolt"></i> <span data-i="brand"></span></a>
+ <div class="links" id="links">
+  <a onclick="nav('home')" data-i="n_home"></a><a onclick="nav('why')" data-i="n_why"></a><a onclick="nav('how')" data-i="n_how"></a>
+  <a class="lb" onclick="openLb()" data-i="n_lb"></a><a onclick="nav('about')" data-i="n_about"></a>
+ </div>
+ <div class="nav-r"><button class="ic-btn" id="thm" onclick="toggleTheme()"></button><button class="ic-btn" id="lng" onclick="toggleLang()">EN</button>
+  <button class="y sm" id="hdr" onclick="acct()"></button><button class="burger" onclick="$('#links').classList.toggle('open')"><i data-ic="menu"></i></button></div>
+</div></nav>
+
+<div class="wrap">
+<section class="v" id="home">
+ <div class="hero"><span class="pill"><i></i><span data-i="pill"></span></span>
+  <h1 data-i="h1"></h1><p data-i="hp"></p>
+  <div class="row"><button class="y big" onclick="need(()=>setup('solo'))" data-i="b_solo"></button><button class="big g" onclick="need(()=>setup('multi'))" data-i="b_multi"></button></div></div>
+ <div class="sec" id="why"><span class="lbl">WHY</span><h2 data-i="why_h"></h2><p class="sub" data-i="why_s"></p>
+  <div class="cards">
+   <div class="glass card"><div class="ic"><i data-ic="bolt"></i></div><h3 data-i="c1h"></h3><p data-i="c1p"></p></div>
+   <div class="glass card"><div class="ic"><i data-ic="crown"></i></div><h3 data-i="c2h"></h3><p data-i="c2p"></p></div>
+   <div class="glass card"><div class="ic"><i data-ic="trophy"></i></div><h3 data-i="c3h"></h3><p data-i="c3p"></p></div></div></div>
+ <div class="sec" id="how"><span class="lbl">PROCESS</span><h2 data-i="how_h"></h2><p class="sub" data-i="how_s"></p>
+  <div class="cards four">
+   <div class="glass card"><b class="num">01</b><h3 data-i="s1h"></h3><p data-i="s1p"></p></div>
+   <div class="glass card"><b class="num">02</b><h3 data-i="s2h"></h3><p data-i="s2p"></p></div>
+   <div class="glass card"><b class="num">03</b><h3 data-i="s3h"></h3><p data-i="s3p"></p></div>
+   <div class="glass card"><b class="num">04</b><h3 data-i="s4h"></h3><p data-i="s4p"></p></div></div></div>
+ <div class="sec" id="top"><span class="lbl">LEADERBOARD</span><h2 data-i="top_h"></h2><p class="sub" data-i="top_s"></p><div class="grid board"></div></div>
+ <div class="sec" id="about"><span class="lbl">ABOUT</span><h2 data-i="about_h"></h2>
+  <div class="glass" style="margin-top:16px;line-height:2;color:var(--m)" data-i="about_p"></div></div>
+ <div class="glass cta"><span class="lbl">LET'S PLAY</span><h2 data-i="cta_h"></h2><p class="sub" data-i="cta_s"></p><button class="y big" onclick="need(()=>setup('multi'))" data-i="mk_lobby"></button></div>
+</section>
+
+<section class="v" id="setup" hidden><div class="glass">
+ <h2 id="stitle"></h2>
+ <label data-i="lbl_cat"></label>
+ <select id="cat"><option value="all" data-i="all"></option><option value="gen" data-i="gen"></option><option value="sci" data-i="sci"></option><option value="tech" data-i="tech"></option></select>
+ <label data-i="lbl_dif"></label>
+ <select id="dif"><option value="all" data-i="all"></option><option value="easy" data-i="easy"></option><option value="medium" data-i="medium"></option><option value="hard" data-i="hard"></option></select>
+ <div class="row" style="margin-top:16px"><button class="y" onclick="startGame()" id="sbtn"></button><button onclick="go('home')" data-i="back"></button></div>
+ <div id="joinBox" style="margin-top:22px"><h3 data-i="join_h"></h3>
+  <div class="row" style="flex-wrap:nowrap"><input id="jcode" data-ph="ph_code" style="direction:ltr;text-transform:uppercase"><button class="g" onclick="join()" data-i="enter"></button></div></div>
+</div></section>
+
+<section class="v" id="lobby" hidden>
+ <div class="glass"><div style="text-align:center"><small style="color:var(--m)" data-i="ph_code"></small><br><span class="code" id="lcode"></span><button class="copy-btn" id="copyCode" onclick="copyCode()" title="کپی کد"><i data-ic="copy"></i> <span data-i="copy_code"></span></button></div>
+  <h3 style="margin-top:14px" data-i="members"></h3><div id="mem"></div>
+  <div class="row" style="margin-top:14px"><button class="g" onclick="S.sock.emit('ready')" data-i="ready_b"></button><button class="y" id="stbtn" onclick="S.sock.emit('start')" data-i="start_b"></button><button onclick="leaveLobby()" data-i="leave"></button></div></div>
+ <div class="glass chat" style="margin-top:16px"><h3 data-i="chat_h"></h3><div class="msgs"></div><form onsubmit="return sendChat(this)"><input data-ph="ph_msg" maxlength="300"><button class="p" data-i="send"></button></form></div>
+</section>
+
+<section class="v" id="quiz" hidden>
+ <div class="glass">
+  <div class="top"><span id="qn"></span><span id="qs"></span><span id="qtimer" class="qtimer" hidden></span></div>
+  <div class="bar"><i id="qbar"></i></div>
+  <div class="q" id="qt"></div><div class="opts" id="qo"></div>
+  <p id="qnote" style="color:var(--m);font-size:13px;margin-top:12px"></p>
+ </div>
+ <div class="glass chat" style="margin-top:16px" id="qchat"><h3 data-i="chat_q"></h3><div class="msgs"></div><form onsubmit="return sendChat(this)"><input data-ph="ph_opin" maxlength="300"><button class="p" data-i="send"></button></form></div>
+</section>
+
+<section class="v" id="result" hidden>
+ <div class="glass"><h2 style="text-align:center" data-i="fin"></h2><div class="big-score" id="rscore"></div>
+  <p id="rnames" style="text-align:center;color:var(--m);margin:6px 0 16px"></p>
+  <div class="row"><button class="y" onclick="again()" data-i="again"></button><button onclick="leaveLobby()" data-i="home_b"></button></div></div>
+ <div class="grid board"></div>
+</section>
+
+<section class="v lbp" id="lb" hidden>
+ <div><span class="lbl blue">LEADERBOARD</span><h2 data-i="lb_h"></h2><p class="sub" data-i="lb_s"></p></div>
+ <div class="grid board" data-full="1"></div>
+</section>
+
+<section class="v" id="profile" hidden>
+ <div class="glass pf-head"><div class="avatar" id="pav"></div><div><h2 id="pname"></h2><span class="muted" data-i="pf_sub"></span></div></div>
+ <div class="stats"><div class="glass st"><b id="pp">0</b><span data-i="pf_pts"></span></div><div class="glass st"><b id="pr">-</b><span data-i="pf_rank"></span></div><div class="glass st"><b id="pg">0</b><span data-i="pf_games"></span></div></div>
+ <div class="grid">
+  <div class="glass"><h3 data-i="pf_recent"></h3><div id="prec"></div></div>
+  <div class="glass"><h3 data-i="pf_name"></h3><input id="nn" data-ph="ph_newname"><button class="y" onclick="chName()" data-i="save"></button>
+   <h3 style="margin-top:22px" data-i="pf_pass"></h3><input id="op" type="password" data-ph="ph_oldpass"><input id="np" type="password" data-ph="ph_newpass"><button class="y" onclick="chPass()" data-i="save"></button>
+   <button class="out" onclick="logout()" data-i="logout"></button></div>
+ </div>
+</section>
+</div>
+
+<footer class="foot"><div class="foot-in">
+ <div><div class="logo"><i data-ic="bolt"></i> <span data-i="brand"></span></div><p data-i="foot_p"></p></div>
+ <div class="fl"><a onclick="nav('why')" data-i="n_why"></a><a onclick="nav('how')" data-i="n_how"></a><a onclick="openLb()" data-i="n_lb"></a><a onclick="nav('about')" data-i="n_about"></a></div>
+ <div class="fl"><a onclick="need(()=>setup('solo'))" data-i="t_solo"></a><a onclick="need(()=>setup('multi'))" data-i="t_multi"></a></div>
+</div><div class="copy" data-i="copy"></div></footer>
+
+<div class="modal" id="auth" hidden><div class="glass">
+ <div class="tabs"><button id="tl" class="on" onclick="tab(0)" data-i="a_in"></button><button id="tr" onclick="tab(1)" data-i="a_up"></button></div>
+ <input id="un" data-ph="ph_user" autocomplete="username"><input id="pw" type="password" data-ph="ph_pass" autocomplete="current-password">
+ <div class="err" id="aerr"></div>
+ <div class="row"><button class="y" onclick="doAuth()" data-i="ok"></button><button onclick="$('#auth').hidden=true" data-i="close"></button></div>
+</div></div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
